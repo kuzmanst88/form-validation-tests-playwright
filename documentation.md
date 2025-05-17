@@ -19,9 +19,13 @@ This document provides detailed insights into the automated test suite developed
 
 To ensure clarity and maintainability across all test files, a consistent approach was applied when defining selectors and variables for interacting with DOM elements:
 
-<pre> ```ts 
-emailInput = page.locator('[data-cy="email-input"]'); confirmEmailInput = page.locator('input[name="confirmEmail"]'); passwordInput = page.locator('[data-automation="password-field"]'); submitButton = page.locator("#submitBtn"); statusMessage = page.locator("#submission-status"); 
-``` </pre>
+<pre> 
+emailInput = page.locator('[data-cy="email-input"]'); 
+confirmEmailInput = page.locator('input[name="confirmEmail"]');
+passwordInput = page.locator('[data-automation="password-field"]'); 
+submitButton = page.locator("#submitBtn"); 
+statusMessage = page.locator("#submission-status"); 
+</pre>
 
 ---
 
