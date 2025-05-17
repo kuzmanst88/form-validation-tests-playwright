@@ -29,22 +29,30 @@ statusMessage = page.locator("#submission-status");
 
 ---
 
-## 🧠 3. Detailed Test Descriptions
+## 🧠 3. Test Descriptions
 
-### 🔹 3.1 `api-submission.spec.ts`
+### 🔹 3.1 `registration-form-general-tests.spec.ts`
 
-- **Testing Logic**: Simulates a full form submission with valid credentials and checks for a successful backend response message.
+- **Testing Logic**:
+  - Covers general user interactions with the form.
+  - Tests UI behaviors like field validation, empty field errors, submit button state, and password visibility toggle.
 - **Objectives**:
-  - Ensure backend registration response is triggered correctly.
-  - Confirm user sees a success message upon submission.
+  - Ensure fields are required before submission.
+  - Submit button only activates when all fields are valid.
+  - Password visibility toggle (👁️ / 🔒) works as expected.
 - **Results & Observations**:
-  - ✅ Passed with `Registration successful!` message visible post-submit.
-  - Validated that no errors occurred on successful flow.
+  - ✅ Error messages triggered appropriately for empty fields.
+  - ✅ Toggle behavior accurately switches password visibility and icon state.
+  - ✅ Submit button can only be used if all fields pass the JS validation.
+  - ✅ Error message appears when email and confirmation email do not match.
 
 ---
 
 ### 🔹 3.2 `email-fields-input-validation.spec.ts`
 
+- **Input Acceptance Criteria**:
+  - Must be a valid email format
+  - Maximum length: 25 characters
 - **Testing Logic**:
   - Runs positive and negative test cases on the email fields.
   - Tests valid email formats and known invalid patterns (e.g., missing "@" or domain).
@@ -53,12 +61,15 @@ statusMessage = page.locator("#submission-status");
   - Ensure mismatch in email and confirm-email fields triggers an error.
 - **Results & Observations**:
   - ✅ All valid emails accepted, invalid ones correctly rejected.
-  - Error message appears when confirmation does not match.
 
 ---
 
 ### 🔹 3.3 `password-field-validation.spec.ts`
 
+- **Input Acceptance Criteria**:
+  - Length must be between 6-20 characters
+  - Must contain at least one capital letter
+  - Must contain at least one digit
 - **Testing Logic**:
   - Runs validation on password strength rules including required characters, length, and complexity.
   - Separates valid and invalid cases.
@@ -72,18 +83,17 @@ statusMessage = page.locator("#submission-status");
 
 ---
 
-### 🔹 3.4 `registration-form-general-tests.spec.ts`
+### 🔹 3.4 `api-submission.spec.ts`
 
-- **Testing Logic**:
-  - Covers general user interactions with the form.
-  - Tests UI behaviors like field validation, empty field errors, submit button state, and password visibility toggle.
+- **Acceptance Criteria**:
+
+- **Testing Logic**: Simulates a full form submission with valid credentials and checks for a successful backend response message.
 - **Objectives**:
-  - Ensure fields are required before submission.
-  - Submit button only activates when all fields are valid.
-  - Password visibility toggle (👁️ / 🔒) works as expected.
+  - Ensure backend registration response is triggered correctly.
+  - Confirm user sees a success message upon submission.
 - **Results & Observations**:
-  - ✅ Error messages triggered appropriately for empty fields.
-  - ✅ Toggle behavior accurately switches password visibility and icon state.
+  - ✅ Passed with `Registration successful!` message visible post-submit.
+  - Validated that no errors occurred on successful flow.
 
 ---
 
