@@ -72,9 +72,17 @@ npx playwright show-report
 
 ## ✅ Testing Strategy & Approach
 
-This test suite focuses on validating user input in the **email** and **confirm email** fields during registration.
+This test suite is organized into four categories:
 
-### 🔄 Coverage Includes:
+### General Registration Form Behavior
+
+**Test File**: `tests/registration-form-general-tests.spec.ts`
+
+### Email Fields Input Validation
+
+**Test File**: `tests/email-fields-input-validation.spec.ts`
+
+This test focuses on validating user input in the **email** and **confirm email** fields during registration.
 
 - ✅ Valid email patterns including:
 
@@ -91,30 +99,11 @@ This test suite focuses on validating user input in the **email** and **confirm 
   - Localization & Unicode edge cases
   - Common security exploits (SQL injection, XSS, path traversal)
 
-### 🧠 Testing Logic:
+### Password Field Input Validation
 
-- Each test enters the same email in both email fields.
-- A strong valid password is always used (`StrongPass123!`) to isolate email-related validation.
-- If the **submit button** is disabled, the frontend (JavaScript) validation has rejected the email — this is asserted immediately.
-- If submission is allowed, a DOM status message is evaluated to assert whether the backend accepted or rejected the submission.
-
----
-
-## 🔎 Observations During Testing
-
-- **Client-side validation** appears incomplete — some malformed emails bypassed frontend checks and reached the backend.
-- The **status message** (`#submission-status`) sometimes returned ambiguous results; improving backend feedback could enhance UX.
-- Certain **dangerous input patterns** (e.g., script tags, SQL-like queries) were not consistently filtered — stronger backend sanitization is recommended.
-
-## 🔐 Password Field Validation
+**Test File**: `tests/password-field-validation.spec.ts`
 
 This section of the QA suite verifies password input behavior on the registration form.
-
-### 🧪 Test File
-
-```
-tests/password-field-validation.spec.ts
-```
 
 ### 🎯 Objectives
 
@@ -124,13 +113,18 @@ Ensure the password field accepts only passwords that meet the defined security 
 - Required character types (uppercase, lowercase, digits, special chars)
 - Rejection of weak or incomplete passwords
 
----
+### API Submission & Response Handling
 
-### 🧠 Testing Logic
+**Test File**: `tests/api-submission.spec.ts`
 
-- Uses valid emails in both email fields to isolate password validation.
-- On valid passwords:
-  - Ensures the submit button is enabled.
-  - Submits the form and checks for final success message.
-- On invalid passwords:
-  - Asserts that the submit button remains disabled, preventing submission.
+Directly tests the /api.php endpoint.
+
+Sends raw POST requests simulating form submission.
+
+Validates:
+
+✅ Correct request returns HTTP 200 with success.
+
+❌ Invalid formats return HTTP 400 with "Validation failed" message.
+
+Includes control character tests, Unicode checks, injection attack vectors, etc.
