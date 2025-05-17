@@ -65,66 +65,8 @@ npx playwright show-report
 ├── playwright.config.ts          # Playwright configuration
 ├── package.json                  # Project metadata and scripts
 ├── package-lock.json
+├── documentation.md              # Project documentation
 
 ```
 
----
-
-## ✅ Testing Strategy & Approach
-
-This test suite is organized into four categories:
-
-### General Registration Form Behavior
-
-**Test File**: `tests/registration-form-general-tests.spec.ts`
-
-### Email Fields Input Validation
-
-**Test File**: `tests/email-fields-input-validation.spec.ts`
-
-This test focuses on validating user input in the **email** and **confirm email** fields during registration.
-
-- ✅ Valid email patterns including:
-
-  - Lowercase/uppercase usage
-  - Special characters (e.g., `+`, `.`, `-`,)
-  - Subdomains and various TLDs
-  - Edge-length boundaries
-  -
-
-- ❌ Invalid formats including:
-  - Malformed or incomplete addresses
-  - Forbidden characters
-  - Control characters and whitespace
-  - Localization & Unicode edge cases
-  - Common security exploits (SQL injection, XSS, path traversal)
-
-### Password Field Input Validation
-
-**Test File**: `tests/password-field-validation.spec.ts`
-
-This section of the QA suite verifies password input behavior on the registration form.
-
-### 🎯 Objectives
-
-Ensure the password field accepts only passwords that meet the defined security criteria, including:
-
-- Minimum/maximum length
-- Required character types (uppercase, lowercase, digits, special chars)
-- Rejection of weak or incomplete passwords
-
-### API Submission & Response Handling
-
-**Test File**: `tests/api-submission.spec.ts`
-
-Directly tests the /api.php endpoint.
-
-Sends raw POST requests simulating form submission.
-
-Validates:
-
-✅ Correct request returns HTTP 200 with success.
-
-❌ Invalid formats return HTTP 400 with "Validation failed" message.
-
-Includes control character tests, Unicode checks, injection attack vectors, etc.
+Detailed information for each of the tests can be found in the documentation
