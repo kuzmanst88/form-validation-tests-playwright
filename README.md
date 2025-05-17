@@ -1,21 +1,20 @@
-# QA Automation Test Suite – Email Field Validation
+# QA Automation Test Suite – Registration Form
 
 ## 📌 Project Description
 
-This repository contains an automated test suite for validating email input behavior on the registration form of the following web application:
+This repository contains an automated test suite for validating email and password input behavior on the registration form of the following web application:
 
 🔗 [https://abc13514.sg-host.com/](https://abc13514.sg-host.com/)
 
-The primary objective is to ensure proper validation of email formats using both client-side JavaScript and backend responses. This suite is implemented using [Playwright](https://playwright.dev), a modern end-to-end testing framework.
+The primary objective is to ensure proper validation of email formats and passwords using both client-side JavaScript and backend responses. This suite is implemented using [Playwright](https://playwright.dev).
 
 ---
 
 ## 🛠 Tech Stack
 
 - **Framework**: [Playwright](https://playwright.dev/)
-- **Language**: TypeScript
+- **Language**: TypeScript, JS
 - **Test Runner**: Playwright Test
-- **Assertions**: Built-in Playwright `expect` API
 
 ---
 
@@ -24,7 +23,7 @@ The primary objective is to ensure proper validation of email formats using both
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/qa-email-validation-suite.git
+git clone https://github.com/kuzmanst88/qa-email-validation-suite.git
 cd qa-email-validation-suite
 ```
 
@@ -59,11 +58,14 @@ npx playwright show-report
 ```
 .
 ├── tests/                         # All test specs
-│   └── email-fields-validation.spec.ts
+│   └── registration-form-general-tests.spec.ts
+│   └── email-fields-input-validation.spec.ts
+│   └── password-field-validation.spec.ts
+│   └── api-submission.spec.ts
 ├── playwright.config.ts          # Playwright configuration
 ├── package.json                  # Project metadata and scripts
 ├── package-lock.json
-├── .gitignore
+
 ```
 
 ---
@@ -75,10 +77,12 @@ This test suite focuses on validating user input in the **email** and **confirm 
 ### 🔄 Coverage Includes:
 
 - ✅ Valid email patterns including:
+
   - Lowercase/uppercase usage
-  - Special characters (e.g., `+`, `.`, `-`)
+  - Special characters (e.g., `+`, `.`, `-`,)
   - Subdomains and various TLDs
   - Edge-length boundaries
+  -
 
 - ❌ Invalid formats including:
   - Malformed or incomplete addresses
@@ -130,8 +134,3 @@ Ensure the password field accepts only passwords that meet the defined security 
   - Submits the form and checks for final success message.
 - On invalid passwords:
   - Asserts that the submit button remains disabled, preventing submission.
-
-
-
-
-
