@@ -1,54 +1,95 @@
-## ✅ Testing Strategy & Approach
+# 📄 Test Documentation – Registration Form QA Automation
 
-This test suite is organized into four categories:
+## 📘 1. Project Overview
 
-### 1. General Registration Form Behavior
+This document provides detailed insights into the automated test suite developed for validating the registration form functionality at [https://abc13514.sg-host.com](https://abc13514.sg-host.com). The suite ensures front-end and API validations for the **email**, **confirm email** and **password**, using the Playwright framework.
 
-**Test File**: `tests/registration-form-general-tests.spec.ts`
+---
 
-- Checks that an error is shown when Email and Confirm Email fields contain different values
-- Ensures submitting with empty fields shows proper validation messages.
-- Ensures the submit button remains disabled until all three fields are valid:
-- Simulates toggling visibility of the password input
+## 🧪 2. Summary of the Test Files
 
-### 2. Email Fields Input Validation
+| Test File                                 | Description                                      |
+| ----------------------------------------- | ------------------------------------------------ |
+| `registration-form-general-tests.spec.ts` | Covers general form behaviors and UI validations |
+| `email-fields-input-validation.spec.ts`   | Validates email and confirm email field inputs   |
+| `password-field-validation.spec.ts`       | Checks password validation rules                 |
+| `api-submission.spec.ts`                  | Tests the final form submission and API response |
 
-**Test File**: `tests/email-fields-input-validation.spec.ts`
+---
 
-This test focuses on validating user input in the **email** and **confirm email** fields during registration.
+To ensure clarity and maintainability across all test files, a consistent approach was applied when defining selectors and variables for interacting with DOM elements:
 
-- ✅ Valid email patterns including:
+<pre> ```ts emailInput = page.locator('[data-cy="email-input"]'); confirmEmailInput = page.locator('input[name="confirmEmail"]'); passwordInput = page.locator('[data-automation="password-field"]'); submitButton = page.locator("#submitBtn"); statusMessage = page.locator("#submission-status"); ``` </pre>
 
-  - Lowercase/uppercase usage
-  - Special characters (e.g., `+`, `.`, `-`,)
-  - Subdomains and various TLDs
-  - Edge-length boundaries
+---
 
-- ❌ Invalid formats including:
-  - Malformed or incomplete addresses
-  - Forbidden characters
-  - Control characters and whitespace
-  - Localization & Unicode edge cases
-  - Common security exploits (SQL injection, XSS, path traversal)
+## 🧠 3. Detailed Test Descriptions
 
-### 3. Password Field Input Validation
+### 🔹 3.1 `api-submission.spec.ts`
 
-**Test File**: `tests/password-field-validation.spec.ts`
+- **Testing Logic**: Simulates a full form submission with valid credentials and checks for a successful backend response message.
+- **Objectives**:
+  - Ensure backend registration response is triggered correctly.
+  - Confirm user sees a success message upon submission.
+- **Results & Observations**:
+  - ✅ Passed with `Registration successful!` message visible post-submit.
+  - Validated that no errors occurred on successful flow.
 
-This section of the QA suite verifies password input behavior on the registration form. It ensures the password field accepts only passwords that meet the defined security criteria, including:
+---
 
-- Minimum/maximum length
-- Required character types (uppercase, lowercase, digits, special chars)
-- Rejection of weak or incomplete passwords
+### 🔹 3.2 `email-fields-input-validation.spec.ts`
 
-### 4. API Submission & Response Handling
+- **Testing Logic**:
+  - Runs positive and negative test cases on the email fields.
+  - Tests valid email formats and known invalid patterns (e.g., missing "@" or domain).
+- **Objectives**:
+  - Prevent invalid email formats.
+  - Ensure mismatch in email and confirm-email fields triggers an error.
+- **Results & Observations**:
+  - ✅ All valid emails accepted, invalid ones correctly rejected.
+  - Error message appears when confirmation does not match.
 
-**Test File**: `tests/api-submission.spec.ts`
+---
 
-Directly tests the /api.php endpoint. Sends raw POST requests simulating form submission.
+### 🔹 3.3 `password-field-validation.spec.ts`
 
-Validates:
+- **Testing Logic**:
+  - Runs validation on password strength rules including required characters, length, and complexity.
+  - Separates valid and invalid cases.
+- **Objectives**:
+  - Enforce password policies: minimum 6 characters, at least 1 uppercase, 1 lowercase, and 1 digit.
+  - Ensure weak passwords disable submission.
+- **Results & Observations**:
+  - ✅ Valid passwords allowed submission.
+  - ❌ Invalid passwords (e.g., only lowercase or too short) kept the submit button disabled.
+  - No backend request was sent for invalid cases.
 
-- Correct request returns HTTP 200 with success.
-- Invalid formats return HTTP 400 with "Validation failed" message.
-- includes tests for email accounts and passwords that pass the JS frontend validation.
+---
+
+### 🔹 3.4 `registration-form-general-tests.spec.ts`
+
+- **Testing Logic**:
+  - Covers general user interactions with the form.
+  - Tests UI behaviors like field validation, empty field errors, submit button state, and password visibility toggle.
+- **Objectives**:
+  - Ensure fields are required before submission.
+  - Submit button only activates when all fields are valid.
+  - Password visibility toggle (👁️ / 🔒) works as expected.
+- **Results & Observations**:
+  - ✅ Error messages triggered appropriately for empty fields.
+  - ✅ Toggle behavior accurately switches password visibility and icon state.
+
+---
+
+## 📚 4. Notes & Best Practices
+
+- Tests are **isolated**, repeatable, and run reliably in both headless and headed modes.
+- Uses Playwright’s **polling and timeout features** to handle dynamic UI states.
+- Clear use of `beforeEach` to minimize duplication and ensure consistent setup.
+
+---
+
+## 📎 5. References
+
+- [Playwright Documentation](https://playwright.dev/)
+- [Project README](./README.md)
