@@ -69,4 +69,4 @@ npx playwright show-report
 
 ```
 
-Detailed information for each of the tests can be found in the documentation
+For a comprehensive explanation of each test case, validation strategy, and expected outcomes, please refer to the [test documentation](./documentation.md).
