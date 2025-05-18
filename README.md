@@ -24,7 +24,7 @@ The primary objective is to ensure proper validation of email formats and passwo
 
 ```bash
 git clone https://github.com/kuzmanst88/form-validation-tests-playwright.git
-cd qa-email-validation-suite
+cd form-validation-tests-playwright
 ```
 
 ### 2. Install Dependencies
