@@ -41,9 +41,10 @@ passwordError = page.locator("#passwordError");
 - **Overview**:
   - Covers general user interactions with the form.
   - Tests UI behaviors like field validation, empty field errors, submit button state, and password visibility toggle.
-- **Objectives**:
-  - Ensure fields are required before submission.
+- **Expectations**:
+  - Valid input is required by all fields before submission
   - Submit button only activates when all fields are valid.
+  - Ensure mismatch in email and confirm-email fields triggers an error.
   - Password visibility toggle (👁️ / 🔒) works as expected.
 - **Results**:
   - ✅ Error messages triggered appropriately for empty fields.
@@ -67,12 +68,9 @@ The final test confirmed that the password toggle button reveals and hides the p
 - **Input Acceptance Criteria**:
   - Must be a valid email format
   - Maximum length: 25 characters
-- **Overview**:
-  - Runs positive and negative test cases on the email fields.
-  - Tests valid email formats and known invalid patterns (e.g., missing "@" or domain).
-- **Objectives**:
-  - Prevent invalid email formats.
-  - Ensure mismatch in email and confirm-email fields triggers an error.
+- **Expectations**:
+  - Tests on valid email formats should pass if message for succesful form submission is displayed
+  - For invalid submissions, the test is passed if JS validation error is triggered in the email field or by the submit button
 - **Results**:
   - ✅ All valid emails have been accepted
   - ❌ The form accepts several maliciously crafted email addresses that resemble SQL injection payloads
@@ -106,13 +104,13 @@ It also allows submissions with email accounts that include leading or trailing 
   - Length must be between 6-20 characters
   - Must contain at least one capital letter
   - Must contain at least one digit
-- **Overview**:
-  - Runs validation on password strength rules including required characters, length, and complexity.
-  - Separates valid and invalid cases into different arrays.
+- **Expectations**:
+  - Tests on valid passwords should pass if successful message is displayed following the form submission
+  - Tests on invalid passwords should pass if validation error is triggered after input or after form submission
 - **Objectives**:
   - Ensure weak, long passwords or unusual characters are not accepted
 - **Results**:
-  - ✅ Valid passwords allowed submission.
+  - ✅ All valid passwords passed the test
   - ❌ The form accepts empty spaces in the password field, which allows the usage of weak passwords. Some unusal characters can be used too
 - **Testing logic and Observations**:
 
@@ -122,7 +120,7 @@ The following tests have failed:
 
 - the password field allows the submission of HTML code
 - it allows the usage of empty spaces, which could potentially be used to execute MySQL queries.
-- It also allows submitting extremely weak passwords such as " B1" (4 empty spaces)
+- It also allows submitting extremely weak passwords such as " B1" (4 empty spaces followed by capital letter and a digit)
 - It allows submissions of emojis
 
 Even though it allows the submission of unusual characters, the characters limit could not be exceeded.
