@@ -38,18 +38,27 @@ passwordError = page.locator("#passwordError");
 
 ### 🔹 3.1 `registration-form-general-tests.spec.ts`
 
-- **Testing Logic**:
+- **Overview**:
   - Covers general user interactions with the form.
   - Tests UI behaviors like field validation, empty field errors, submit button state, and password visibility toggle.
 - **Objectives**:
   - Ensure fields are required before submission.
   - Submit button only activates when all fields are valid.
   - Password visibility toggle (👁️ / 🔒) works as expected.
-- **Results & Observations**:
+- **Results**:
   - ✅ Error messages triggered appropriately for empty fields.
   - ✅ Toggle behavior accurately switches password visibility and icon state.
   - ✅ Submit button can only be used if all fields pass the JS validation.
   - ✅ Error message appears when email and confirmation email do not match.
+- **Testing logic and Observations**:
+
+The script covers general behavior tests. The first test verifies that the form can only be submitted if the Email and Email Confirm fields contain the same input value. I used three different confirm email scenarios, and one of them failed the test. The form incorrectly accepted the inputs as equal when one of the email fields contained a trailing space. I believe this is due to the use of the trim() function in the JavaScript validation. I tested the same scenario during the API tests and confirmed that the submission was blocked, which means the error can be disregarded.
+
+At page load, the Confirm button is in an "enabled" state, despite empty fields. The second test verifies that the form does not accept submissions in this state. No issues were observed.
+
+The purpose of the third test is to verify that the Confirm button remains disabled until all fields pass the validation checks.
+
+The final test confirmed that the password toggle button reveals and hides the password correctly, with no issues detected.
 
 ---
 
@@ -58,19 +67,20 @@ passwordError = page.locator("#passwordError");
 - **Input Acceptance Criteria**:
   - Must be a valid email format
   - Maximum length: 25 characters
-- **Testing Logic**:
+- **Overview**:
   - Runs positive and negative test cases on the email fields.
   - Tests valid email formats and known invalid patterns (e.g., missing "@" or domain).
 - **Objectives**:
   - Prevent invalid email formats.
   - Ensure mismatch in email and confirm-email fields triggers an error.
-- **Results & Observations**:
+- **Results**:
   - ✅ All valid emails have been accepted
   - ❌ The form accepts several maliciously crafted email addresses that resemble SQL injection payloads
+- **Testing logic and Observations**:
 
 This script validates the email input handling of the registration form. It tests a wide range of valid and invalid email formats to ensure the frontend's JavaScript validation and server-side logic behave as expected. The script fills both the "Email" and "Confirm Email" fields with test inputs, uses a valid password, and attempts to submit the form. For valid inputs, it verifies successful registration, while for invalid inputs, it checks that the form either disables the submission button or displays appropriate error messages.
 
-It appears that the definition of a valid email address could vary depending on the email provider. During my initial tests, I noticed that the form accepts submissions with email addresses that include special characters (such as ! # $ % & ' \* + / = ? ^ \_ { | } ~ -`). Such characters are not allowed by many providers, including SiteGround. At first, I included them as invalid submissions. However, these signs are allowed to be included in the local part, according to RFC5322, which is why I decided to consider invalid only email addresses that include such characters in the domain part.
+It appears that the definition of a valid email address could vary depending on the email provider. During my initial tests, I noticed that the form accepts submissions with email addresses that include special characters (e.g., ! # $ % & ' \* / ? ^ \_ { | } ~ -). Such characters are not allowed by many providers, including SiteGround. At first, I included them as invalid submissions. However, these signs are allowed to be included in the local part, according to RFC5322, which is why I decided to consider invalid only email addresses that include such characters in the domain part.
 
 According to the results of the tests, the form accepts the following email accounts as valid inputs:
 
@@ -86,6 +96,8 @@ SHOW/\*\*/TABLES--@x.a
 
 These inputs contain SQL injection patterns embedded within the email string. If not properly sanitized on the backend, such inputs could exploit database queries—potentially exposing, modifying or deleting sensitive data.
 
+It also allows submissions with email accounts that include leading or trailing spaces. This issue appears to be covered by the trim() used in the JS validation, but additional checks will be performed during the API tests.
+
 ---
 
 ### 🔹 3.3 `password-field-validation.spec.ts`
@@ -94,21 +106,26 @@ These inputs contain SQL injection patterns embedded within the email string. If
   - Length must be between 6-20 characters
   - Must contain at least one capital letter
   - Must contain at least one digit
-- **Testing Logic**:
+- **Overview**:
   - Runs validation on password strength rules including required characters, length, and complexity.
   - Separates valid and invalid cases into different arrays.
 - **Objectives**:
   - Ensure weak, long passwords or unusual characters are not accepted
-- **Results & Observations**:
+- **Results**:
   - ✅ Valid passwords allowed submission.
-  - ❌ The form accepts empty spaces in the password field, which allows the usage of weak passwords
+  - ❌ The form accepts empty spaces in the password field, which allows the usage of weak passwords. Some unusal characters can be used too
+- **Testing logic and Observations**:
 
-I performed tests with all available scenarios and can confirm all valid cases passed successfully. The only case I was unsure about are passwords that only contain digits and upper case letters. It is not explicitly specified that the password must contain lower case letters, so the script accepts such passwords as valid (example: ONLYUPPER123).
+Similarly to the email input tests, I added valid and invalid password examples to different arrays. Then I used two "for" loops to go through all password examples and check their validity. It is not explicitly specified in the requirements that the password must contain lower case letters, so the script accepts such passwords as valid (example: ONLYUPPER123).
 
 The following tests have failed:
 
-- the form allows the submission of HTML code
-- it allows the usage of empty spaces, which could potentially be used to execute MySQL queries. It also allows submitting extremely weak passwords such as " B1"
+- the password field allows the submission of HTML code
+- it allows the usage of empty spaces, which could potentially be used to execute MySQL queries.
+- It also allows submitting extremely weak passwords such as " B1" (4 empty spaces)
+- It allows submissions of emojis
+
+Even though it allows the submission of unusual characters, the characters limit could not be exceeded.
 
 ---
 
@@ -118,10 +135,39 @@ The following tests have failed:
   - Accepts only POST requests
   - Content-type: application/json
   - Request body must include "email", "confirmEmail" and "password" fields
-- **Testing Logic**: Simulates a full form submission with valid credentials and checks for a successful backend response message. The primary goal is to test server-side validation for submissions that pass the JS validation.
+- **Overview**: Simulates a full form submission with valid credentials and checks for a successful backend response message. The primary goal is to test server-side validation for submissions that fail the JS validation.
 - **Objectives**:
   - Ensure backend registration response is triggered correctly.
   - Confirm user HTTP 200 response code is returned to all valid submissions and 400 for invalid ones
-- **Results & Observations**:
+- **Results**:
   - ✅ Passed with `Registration successful!` message visible post-submit.
   - Validated that no errors occurred on successful flow.
+- **Testing logic and Observations**:
+
+My plan here was to ensure that api.php accepts valid requests only (POST, json format, request body elements). I also wanted to test if emails and passwords that fail during the frontend JS validation can not be submitted with api calls.
+
+At first, I ran two simple tests to verify that submissions with correct format and registration details will receive 200 response. The second test verifies that an error will lead to 400.
+
+Next, I decided to test all email accounts that have been blocked by the form's JS validation script. I temporarily added console.log() right after the assertation where the JS validation blocks invalid emails to help me generate a list of such accounts. Then I added them to an array in api-submission.spec.ts and used for loop to perform the validation tests. Submissions using all of these invalid accounts have been blocked, inlcuding the ones with leading/trailing slashes I described in the email-fields-input-validation.spec.ts part.
+
+I used similar approach with the passwords - all passwords blocked by the JS validation have been tested via api calls. No errors detected. A for loop goes through an array of invalid passwords and tests each one of them with valid email and confirm email. The test is only successful if api.php returns 400.
+
+Finally, I performed tests to verify the form would not accept requests:
+
+- The only supported request method is POST: submissions with GET, PUT and DELETE failed with 405 error.
+- It does not accept request with incomplete JSON (returns 400)
+- It does not accept requests if Cntent-type is not JSON
+
+## 🏁 Conclusion
+
+The automated test suite successfully verifies the registration form’s core functionalities across frontend and backend layers. Frontend validations effectively prevent most invalid inputs and guide user interactions, while API tests confirm robust backend enforcement of critical rules.
+
+However, some gaps remain: email fields accept potentially malicious SQL injection-like inputs and password fields allow weak or unconventional entries such as spaces and emojis. These vulnerabilities should be addressed to strengthen security.
+
+In addition, there are instances of PHP code displayed as text in the HTML souce code, such as:
+
+<input type="text" id="email\_<?php echo substr(md5(time()), 0, 6); ?>"
+
+It looks like a function to dynamically regenerate the id on each refresh. This usually happens if you try to run PHP code in .HTML files.
+
+Future work should focus on enhancing input sanitization.
