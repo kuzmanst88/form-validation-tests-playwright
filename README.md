@@ -45,6 +45,12 @@ npx playwright test
 npx playwright test --headed
 ```
 
+✅ To run tests in UI mode:
+
+```bash
+npx playwright test --ui
+```
+
 🔍 To view the HTML test report after running:
 
 ```bash
