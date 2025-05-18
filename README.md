@@ -23,7 +23,7 @@ The primary objective is to ensure proper validation of email formats and passwo
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/kuzmanst88/qa-email-validation-suite.git
+git clone https://github.com/kuzmanst88/form-validation-tests-playwright.git
 cd qa-email-validation-suite
 ```
 
