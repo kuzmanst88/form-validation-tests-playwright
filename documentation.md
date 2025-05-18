@@ -20,11 +20,16 @@ This document provides detailed insights into the automated test suite developed
 To ensure clarity and maintainability across all test files, a consistent approach was applied when defining selectors and variables for interacting with DOM elements:
 
 <pre> 
-emailInput = page.locator('[data-cy="email-input"]'); 
-confirmEmailInput = page.locator('input[name="confirmEmail"]');
-passwordInput = page.locator('[data-automation="password-field"]'); 
-submitButton = page.locator("#submitBtn"); 
-statusMessage = page.locator("#submission-status"); 
+// Email field, Email confirm and Password
+emailField = page.locator('[data-cy="email-input"]'); 
+confirmEmailField = page.locator('input[name="confirmEmail"]');
+passwordField = page.locator('[data-automation="password-field"]'); 
+// "Confirm" button
+submitButton = page.getByRole("button", {name: "Complete Registration",  });
+// JS validation errors
+emailError = page.locator("#emailError");
+confirmEmailError = page.locator("#confirmEmailError");
+passwordError = page.locator("#passwordError");
 </pre>
 
 ---
@@ -60,7 +65,22 @@ statusMessage = page.locator("#submission-status");
   - Prevent invalid email formats.
   - Ensure mismatch in email and confirm-email fields triggers an error.
 - **Results & Observations**:
-  - ✅ All valid emails accepted, invalid ones correctly rejected.
+  - ✅ All valid emails have been accepted
+  - ❌ The form accepts several maliciously crafted email addresses that resemble SQL injection payloads
+
+This script validates the email input handling of the registration form. It tests a wide range of valid and invalid email formats to ensure the frontend's JavaScript validation and server-side logic behave as expected. The script fills both the "Email" and "Confirm Email" fields with test inputs, uses a valid password, and attempts to submit the form. For valid inputs, it verifies successful registration, while for invalid inputs, it checks that the form either disables the submission button or displays appropriate error messages.
+
+It appears that the definition of a valid email address could vary depending on the email provider. During my initial tests, I noticed that the form accepts submissions with email addresses that include special characters (such as ! # $ % & ' \* + / = ? ^ \_ { | } ~ -`). Such characters are not allowed by many providers, including SiteGround. At first, I included them as invalid submissions. However, these signs are allowed to be included in the local part, according to RFC5322, which is why I decided to consider invalid only email addresses that include such characters in the domain part.
+
+According to the results of the tests, the form accepts the following email accounts as valid inputs:
+
+user'%20OR%201=1--@dn.com
+u'%09OR%091=1--@domain.co
+us'/**/OR/**/1=1--@ex.co
+a'OR'1'='1@x.io
+SHOW/\*\*/TABLES--@x.a
+
+These inputs contain SQL injection patterns embedded within the email string. If not properly sanitized on the backend, such inputs could exploit database queries—potentially exposing, modifying, or deleting sensitive data.
 
 ---
 
@@ -72,40 +92,32 @@ statusMessage = page.locator("#submission-status");
   - Must contain at least one digit
 - **Testing Logic**:
   - Runs validation on password strength rules including required characters, length, and complexity.
-  - Separates valid and invalid cases.
+  - Separates valid and invalid cases into different arrays.
 - **Objectives**:
-  - Enforce password policies: minimum 6 characters, at least 1 uppercase, 1 lowercase, and 1 digit.
-  - Ensure weak passwords disable submission.
+  - Ensure weak, long passwords or unusual characters are not accepted
 - **Results & Observations**:
   - ✅ Valid passwords allowed submission.
-  - ❌ Invalid passwords (e.g., only lowercase or too short) kept the submit button disabled.
-  - No backend request was sent for invalid cases.
+  - ❌ The form accepts empty spaces in the password field, which allows the usage of weak passwords
+
+I performed tests with all available scenarios and can confirm all valid cases passed successfully. The only case I was unsure about are passwords that only contain digits and upper case letters. It is not explicitly specified that the password must contain lower case letters, so the script accepts such passwords as valid (example: ONLYUPPER123).
+
+The following tests have failed:
+
+- the form allows the submission of HTML code
+- it allows the usage of empty spaces, which could potentially be used to execute MySQL queries. It also allows submitting extremely weak passwords such as " B1"
 
 ---
 
 ### 🔹 3.4 `api-submission.spec.ts`
 
 - **Acceptance Criteria**:
-
-- **Testing Logic**: Simulates a full form submission with valid credentials and checks for a successful backend response message.
+  - Accepts only POST requests
+  - Content-type: application/json
+  - Request body must include "email", "confirmEmail" and "password" fields
+- **Testing Logic**: Simulates a full form submission with valid credentials and checks for a successful backend response message. The primary goal is to test server-side validation for submissions that pass the JS validation.
 - **Objectives**:
   - Ensure backend registration response is triggered correctly.
-  - Confirm user sees a success message upon submission.
+  - Confirm user HTTP 200 response code is returned to all valid submissions and 400 for invalid ones
 - **Results & Observations**:
   - ✅ Passed with `Registration successful!` message visible post-submit.
   - Validated that no errors occurred on successful flow.
-
----
-
-## 📚 4. Notes & Best Practices
-
-- Tests are **isolated**, repeatable, and run reliably in both headless and headed modes.
-- Uses Playwright’s **polling and timeout features** to handle dynamic UI states.
-- Clear use of `beforeEach` to minimize duplication and ensure consistent setup.
-
----
-
-## 📎 5. References
-
-- [Playwright Documentation](https://playwright.dev/)
-- [Project README](./README.md)
