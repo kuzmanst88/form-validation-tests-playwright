@@ -80,7 +80,7 @@ us'/**/OR/**/1=1--@ex.co
 a'OR'1'='1@x.io
 SHOW/\*\*/TABLES--@x.a
 
-These inputs contain SQL injection patterns embedded within the email string. If not properly sanitized on the backend, such inputs could exploit database queries—potentially exposing, modifying, or deleting sensitive data.
+These inputs contain SQL injection patterns embedded within the email string. If not properly sanitized on the backend, such inputs could exploit database queries—potentially exposing, modifying or deleting sensitive data.
 
 ---
 
