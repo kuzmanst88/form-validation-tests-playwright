@@ -160,7 +160,7 @@ However, some gaps remain: email fields accept potentially malicious SQL injecti
 
 In addition, there are instances of PHP code displayed as text in the HTML souce code, such as:
 
-<pre><code>```<label data-auto-gen="email-field-<?php echo rand(1000, 9999); ?>">
+<pre><code>``` data-auto-gen="email-field-<?php echo rand(1000, 9999); ?>">
  ```</code></pre>
 
 It looks like a function to dynamically regenerate the id on each refresh. This usually happens if you try to run PHP code in .HTML files.
