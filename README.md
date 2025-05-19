@@ -33,6 +33,10 @@ cd form-validation-tests-playwright
 npm install
 ```
 
+```bash
+npx playwright install
+```
+
 ### 3. Run Tests
 
 ```bash

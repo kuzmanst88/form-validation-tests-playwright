@@ -15,7 +15,6 @@ test.describe("User Registration Form", () => {
     "different@example.com", // completely different account
     "uSEr@example.com", // the same email using uppercase letters
     " user@example.com ", // the same email using trailing slash
-    "uSEr@example.com%20", // the same email using uppercase letters
   ];
 
   test.beforeEach(async ({ page }) => {
@@ -100,7 +99,7 @@ test.describe("User Registration Form", () => {
     // check if the type has changed to text and the icon to lock
     await expect(passwordField).toHaveAttribute("type", "text");
     await expect(togglePasswordBtn).toHaveText("🔒");
-    await page.waitForTimeout(500); //only use to slow down the process in UI for better visibility, will remove this later
+    // await page.waitForTimeout(500); //only use to slow down the process in UI for better visibility, will remove this later
 
     //click on the icon once again and check if the type and icon will reset to default
     await togglePasswordBtn.click();

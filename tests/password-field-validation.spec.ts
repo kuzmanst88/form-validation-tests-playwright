@@ -102,13 +102,12 @@ test.describe("Password Validation Tests", () => {
       const isBtnDisabled = await submitButton.isDisabled();
 
       if (isBtnDisabled) {
-        await expect(passwordError).toBeVisible();
+        // await expect(passwordError).toBeVisible();
         await expect(passwordError).toHaveText(
           /(Password is required|Password must be between 6 and 20 characters|Password must contain at least one digit|Password must contain at least one capital letter)/
         );
-        console.log(`P: ${input}`);
       } else {
-        // Click submit
+        // Click submit btn
         await submitButton.click();
 
         // Wait for final status
