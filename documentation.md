@@ -82,15 +82,7 @@ It appears that the definition of a valid email address could vary depending on 
 
 According to the results of the tests, the form accepts the following email accounts as valid inputs:
 
-user'%20OR%201=1--@dn.com
-
-u'%09OR%091=1--@domain.co
-
-us'/**/OR/**/1=1--@ex.co
-
-a'OR'1'='1@x.io
-
-SHOW/\*\*/TABLES--@x.a
+<pre><code>```text user'%20OR%201=1--@dn.com u'%09OR%091=1--@domain.co us'/**/OR/**/1=1--@ex.co a'OR'1'='1@x.io SHOW/**/TABLES--@x.a ```</code></pre>
 
 These inputs contain SQL injection patterns embedded within the email string. If not properly sanitized on the backend, such inputs could exploit database queries—potentially exposing, modifying or deleting sensitive data.
 
@@ -164,7 +156,7 @@ However, some gaps remain: email fields accept potentially malicious SQL injecti
 
 In addition, there are instances of PHP code displayed as text in the HTML souce code, such as:
 
-<input type="text" id="email\_<?php echo substr(md5(time()), 0, 6); ?>"
+<pre><code>```php &lt;input type="text" id="email_<?php echo substr(md5(time()), 0, 6); ?>"&gt; ```</code></pre>
 
 It looks like a function to dynamically regenerate the id on each refresh. This usually happens if you try to run PHP code in .HTML files.
 
