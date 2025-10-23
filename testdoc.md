@@ -37,7 +37,7 @@ Many WordPress users need to customize their website’s theme without losing ch
 2. Create a new folder named `<parent-theme-name>-child` (e.g., `hello-elementor-child`).
 3. In the child theme folder, create `style.css` and add the following header:
 
-\```css
+```css
 /*
  Theme Name:   Hello Elementor Child
  Description:  Child theme for Hello Elementor
