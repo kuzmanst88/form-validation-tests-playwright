@@ -44,7 +44,7 @@ Many WordPress users need to customize their website’s theme without losing ch
  Template:     hello-elementor
  Version:      1.0.0
 */
-\```
+```
 
 4. Create `functions.php` and add this code to enqueue parent styles:
 
