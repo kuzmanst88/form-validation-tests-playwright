@@ -37,10 +37,29 @@ Many WordPress users need to customize their website’s theme without losing ch
 2. Create a new folder named `<parent-theme-name>-child` (e.g., `hello-elementor-child`).
 3. In the child theme folder, create `style.css` and add the following header:
 
-```css
+\```css
 /*
  Theme Name:   Hello Elementor Child
  Description:  Child theme for Hello Elementor
  Template:     hello-elementor
  Version:      1.0.0
 */
+\```
+
+4. Create `functions.php` and add this code to enqueue parent styles:
+
+\```php
+<?php
+function my_child_theme_enqueue_styles() {
+    $parenthandle = 'parent-style';
+    wp_enqueue_style( $parenthandle, get_template_directory_uri() . '/style.css' );
+    wp_enqueue_style( 'child-style', get_stylesheet_uri(), array( $parenthandle ) );
+}
+add_action( 'wp_enqueue_scripts', 'my_child_theme_enqueue_styles' );
+\```
+
+5. Activate the child theme in WordPress.
+6. Verify everything is working correctly:
+
+- The design of the site has not changed.
+- The new child theme is listed in WordPress backend → Appearance → Themes.
