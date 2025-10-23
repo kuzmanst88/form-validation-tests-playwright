@@ -40,11 +40,8 @@ Many WordPress users need to customize their website’s theme without losing ch
 \```css
 /*
  Theme Name:   Hello Elementor Child
- 
  Description:  Child theme for Hello Elementor
- 
  Template:     hello-elementor
- 
  Version:      1.0.0
  
 */
