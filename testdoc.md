@@ -4,7 +4,7 @@
 Many WordPress users need to customize their website’s theme without losing changes during updates. Directly modifying a parent theme can result in lost customizations when the theme is updated. The solution is to create a **child theme**, which inherits functionality and styling from the parent theme while allowing safe modifications.
 
 ---
-
+ 
 ## 2. Symptoms / Steps for Recreation
 
 **Symptoms / Challenges Without a Child Theme:**
