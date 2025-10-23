@@ -48,6 +48,7 @@ Many WordPress users need to customize their website’s theme without losing ch
 
 4. Create `functions.php` and add this code to enqueue parent styles:
 
+```php
 <?php
 function my_child_theme_enqueue_styles() {
     $parenthandle = 'parent-style';
@@ -56,6 +57,7 @@ function my_child_theme_enqueue_styles() {
 }
 add_action( 'wp_enqueue_scripts', 'my_child_theme_enqueue_styles' );
 ?>
+```
 
 5. Activate the child theme in WordPress.
 6. Verify everything is working correctly:
